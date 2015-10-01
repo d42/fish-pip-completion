@@ -13,6 +13,7 @@ function __fish_pip_using_command
     if [ $argv[1] = $cmd[2] ]
       return 0
     end
+  end
   return 1
 end
 
