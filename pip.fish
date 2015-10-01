@@ -16,6 +16,14 @@ function __fish_pip_using_command
   return 1
 end
 
+function __fish_pip_search_packages
+  set cmd (commandline -op)
+  if [ (count $cmd) -gt 2 ]
+    set q $cmd[-1]
+    pip search $q | grep -ie "^$q" | awk -F' - ' '{print $1}' | sed 's/ //g' | tr 'A-Z' 'a-z'
+  end
+end
+
 #keyword
 complete --no-files  -c pip -n '__fish_pip_needs_command' -a install   -d 'Install packages.'
 complete --no-files  -c pip -n '__fish_pip_needs_command' -a uninstall -d 'Uninstall packages.'
@@ -76,6 +84,7 @@ complete --no-files -c pip	 -n '__fish_pip_using_command install'	  -l no-binary
 complete --no-files -c pip	 -n '__fish_pip_using_command install'	  -l only-binary	 -d "Do not use source packages. Can be supplied multiple times, and each time adds to the existing value. Accepts either :all: to disable all source packages, :none: to empty the set, or one or more package names with commas between them. Packages without binary distributions will fail to install when this option is used on them."
 complete --no-files -c pip	 -n '__fish_pip_using_command install'	  -l pre	 -d "Include pre-release and development versions. By default, pip only finds stable versions."
 complete --no-files -c pip	 -n '__fish_pip_using_command install'	  -l no-clean	 -d "Don't clean up build directories."
+complete --no-files -c pip	 -n '__fish_pip_using_command install'	  -a '(__fish_pip_search_packages)'	 -d "Package"
 
 complete --no-files -c pip	 -n '__fish_pip_using_command list'	 -s o	 -l outdated	 -d "List outdated packages (excluding editables)"
 complete --no-files -c pip	 -n '__fish_pip_using_command list'	 -s u	 -l uptodate	 -d "List uptodate packages (excluding editables)"
