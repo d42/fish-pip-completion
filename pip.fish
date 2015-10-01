@@ -13,7 +13,25 @@ function __fish_pip_using_command
     if [ $argv[1] = $cmd[2] ]
       return 0
     end
+  end
   return 1
+end
+
+function __fish_pip_search_packages
+  set cmd (commandline -op)
+  if [ (count $cmd) -gt 2 ]
+    set q $cmd[-1]
+    pip search $q | grep -ie "^$q" | awk -F' - ' '{print $1}' | sed 's/ //g' | tr 'A-Z' 'a-z'
+  end
+end
+
+function __fish_pip_list_packages
+  set cmd (commandline -op)
+  set q "."
+  if [ (count $cmd) -gt 2 ]
+    set q "^$cmd[-1]"
+  end
+  pip list | grep -ie "$q" | awk '{print $1}' | tr 'A-Z' 'a-z'
 end
 
 #keyword
@@ -76,6 +94,7 @@ complete --no-files -c pip	 -n '__fish_pip_using_command install'	  -l no-binary
 complete --no-files -c pip	 -n '__fish_pip_using_command install'	  -l only-binary	 -d "Do not use source packages. Can be supplied multiple times, and each time adds to the existing value. Accepts either :all: to disable all source packages, :none: to empty the set, or one or more package names with commas between them. Packages without binary distributions will fail to install when this option is used on them."
 complete --no-files -c pip	 -n '__fish_pip_using_command install'	  -l pre	 -d "Include pre-release and development versions. By default, pip only finds stable versions."
 complete --no-files -c pip	 -n '__fish_pip_using_command install'	  -l no-clean	 -d "Don't clean up build directories."
+complete --no-files -c pip	 -n '__fish_pip_using_command install'	  -a '(__fish_pip_search_packages)'	 -d "Package"
 
 complete --no-files -c pip	 -n '__fish_pip_using_command list'	 -s o	 -l outdated	 -d "List outdated packages (excluding editables)"
 complete --no-files -c pip	 -n '__fish_pip_using_command list'	 -s u	 -l uptodate	 -d "List uptodate packages (excluding editables)"
@@ -90,6 +109,7 @@ complete --no-files -c pip	 -n '__fish_pip_using_command show'	 -s f	 -l files	 
 
 complete --no-files -c pip	 -n '__fish_pip_using_command uninstall'	 -s r	 -l requirement	 -d "Uninstall all the packages listed in the given requirements file.  This option can be used multiple times."
 complete --no-files -c pip	 -n '__fish_pip_using_command uninstall'	 -s y	 -l yes	 -d "Don't ask for confirmation of uninstall deletions."
+complete --no-files -c pip	 -n '__fish_pip_using_command uninstall'	 -a '(__fish_pip_list_packages)'	 -d "Package"
 
 complete --no-files -c pip	 -n '__fish_pip_using_command wheel'	 -s w	 -l wheel-dir	 -d "Build wheels into <dir>, where the default is '<cwd>/wheelhouse'."
 complete --no-files -c pip	 -n '__fish_pip_using_command wheel'	  -l use-wheel	 -d "SUPPRESSHELP"
