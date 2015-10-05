@@ -21,17 +21,8 @@ function __fish_pip_search_packages
   set cmd (commandline -op)
   if [ (count $cmd) -gt 2 ]
     set q $cmd[-1]
-    pip search $q | grep -ie "^$q" | awk -F' - ' '{print $1}' | sed 's/ //g' | tr 'A-Z' 'a-z'
+    python pip_install_completion.py $q
   end
-end
-
-function __fish_pip_list_packages
-  set cmd (commandline -op)
-  set q "."
-  if [ (count $cmd) -gt 2 ]
-    set q "^$cmd[-1]"
-  end
-  pip list | grep -ie "$q" | awk '{print $1}' | tr 'A-Z' 'a-z'
 end
 
 #keyword
