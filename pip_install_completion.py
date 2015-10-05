@@ -117,9 +117,9 @@ class SearchCache:
 
 def cached_search(query):
     sc = SearchCommand()
-    options = sc.cmd_opts.defaults
-    index = options['index']
-    db_path = os.path.join(options['cache_dir'], PIP_SEARCH_DB_FILENAME)
+    options, _ = sc.parse_args([])
+    index = options.index
+    db_path = os.path.join(options.cache_dir, PIP_SEARCH_DB_FILENAME)
     cache = SearchCache(index, db_path)
     return cache.search(query)
 
