@@ -141,9 +141,6 @@ class SearchCache:
             return
 
         changes = self.get_changes_since(last_ts)
-        if not changes:
-            self.db.set_timestamp(time.time())
-            return
 
         for package in changes.get('remove', []):
             self.db.rem_package(package)
