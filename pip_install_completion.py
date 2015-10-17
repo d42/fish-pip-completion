@@ -3,6 +3,7 @@ import sys
 import time
 import sqlite3
 from itertools import cycle
+from collections import defaultdict
 
 from pip.commands import SearchCommand
 
@@ -61,6 +62,29 @@ class VeryORM:
             q = "INSERT INTO packages (index_id, name) VALUES(?, ?)"
             con.executemany(q, rows)
 
+    def add_package(self, package):
+        if self.has_package(package):
+            sys.stderr.write("%s is already there\n" % package)
+            return
+
+        id = self.index_id
+        q = 'INSERT INTO packages (index_id, name) VALUES(?, ?)'
+        self.conn.execute(q, [id, package])
+
+    def rem_package(self, package):
+        if not self.has_package(package):
+            sys.stderr.write("%s not found ,_, \n" % package)
+            return
+        id = self.index_id
+        q = 'DELETE FROM packages WHERE index_id=? AND name=?'
+        self.conn.execute(q, [id, package])
+
+    def has_package(self, package):
+        id = self.index_id
+        q = 'SELECT name FROM packages WHERE index_id=? AND name=?'
+        result = self.conn.execute(q, [id, package]).fetchone()
+        return bool(result)
+
     def set_timestamp(self, ts):
         q = " UPDATE indexes SET timestamp=? WHERE id=?"
         with self.conn as con:
@@ -101,18 +125,31 @@ class SearchCache:
         return self.db.get_packages(name)
 
     def get_changes_since(self, timestamp):
+        changes_dict = defaultdict(set)
         changes = self.client.changelog(timestamp)
-        return [(name, action) for (name, _, _, action) in changes
-                if action in ('create', 'remove')]
+        create_remove = [(name, action) for (name, _, _, action) in changes
+                         if action in ('create', 'remove')]
+        for name, action in create_remove:
+            changes_dict[action].add(name)
+        return changes_dict
 
     def update(self):
         last_ts = self.db.get_timestamp()
-        if last_ts != 0 and not self.get_changes_since(last_ts):
+        if last_ts == 0:
+            packages = self.client.list_packages()
+            self.db.set_packages(packages)
+            return
+
+        changes = self.get_changes_since(last_ts)
+        if not changes:
             self.db.set_timestamp(time.time())
             return
 
-        packages = self.client.list_packages()
-        self.db.set_packages(packages)
+        for package in changes.get('remove', []):
+            self.db.rem_package(package)
+        for package in changes.get('create', []):
+            self.db.add_package(package)
+        self.db.set_timestamp(time.time())
 
 
 def cached_search(query):
