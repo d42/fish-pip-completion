@@ -7,7 +7,10 @@ from collections import defaultdict
 import six.moves.xmlrpc_client as xmlrpclib
 import logging
 
-from pip.commands import SearchCommand
+try:
+    from pip.commands import SearchCommand
+except ImportError:
+    from pip._internal.commands import SearchCommand
 
 
 logger = logging.Logger('pip', level=logging.NOTSET)
