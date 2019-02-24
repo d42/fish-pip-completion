@@ -4,7 +4,10 @@ import time
 import sqlite3
 from itertools import cycle
 from collections import defaultdict
-import six.moves.xmlrpc_client as xmlrpclib
+try:
+    import xmlrpclib
+except ImportError:
+    import xmlrpc.client as xmlrpclib
 import logging
 
 try:
