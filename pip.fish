@@ -28,29 +28,37 @@ end
 
 #keyword
 complete --no-files  -c pip -n '__fish_pip_needs_command' -a install   -d 'Install packages.'
+complete --no-files  -c pip -n '__fish_pip_needs_command' -a download  -d 'Download packages.'
 complete --no-files  -c pip -n '__fish_pip_needs_command' -a uninstall -d 'Uninstall packages.'
 complete --no-files  -c pip -n '__fish_pip_needs_command' -a freeze    -d 'Output installed packages in requirements format.'
 complete --no-files  -c pip -n '__fish_pip_needs_command' -a list      -d 'List installed packages.'
 complete --no-files  -c pip -n '__fish_pip_needs_command' -a show      -d 'Show information about installed packages.'
+complete --no-files  -c pip -n '__fish_pip_needs_command' -a check     -d 'Verify installed packages have compatible dependencies'
+complete --no-files  -c pip -n '__fish_pip_needs_command' -a config    -d 'Manage local and global configuration.'
 complete --no-files  -c pip -n '__fish_pip_needs_command' -a search    -d 'Search PyPI for packages.'
 complete --no-files  -c pip -n '__fish_pip_needs_command' -a wheel     -d 'Build wheels from your requirements.'
-complete --no-files -c pip -n '__fish_pip_needs_command' -a zip       -d 'DEPRECATED. Zip individual packages.'
-complete --no-files -c pip -n '__fish_pip_needs_command' -a unzip     -d 'DEPRECATED. Unzip individual packages.'
-complete --no-files -c pip -n '__fish_pip_needs_command' -a bundle    -d 'DEPRECATED. Create pybundles.'
+complete --no-files  -c pip -n '__fish_pip_needs_command' -a hash      -d 'Compute hashes of package archives.'
 complete --no-files  -c pip -n '__fish_pip_needs_command' -a help      -d 'Show help for commands.'
 
 
 #general
 complete --no-files  -c pip -s h,                         -l help      -d 'Show help.'
+complete --no-files  -c pip -l isolated                   -r           -d 'Run pip in an isolated mode, ignoring environment variables and user configuration.'
 complete --no-files  -c pip -s v,                         -l verbose   -d 'Give more output. Option is additive, and can be used up to 3 times.'
 complete --no-files  -c pip -s V,                         -l version   -d 'Show version and exit.'
-complete --no-files  -c pip -s q,                         -l quiet     -d 'Give less output.'
-complete --no-files  -c pip -l log-file                   -r           -d 'Path to a verbose non-appending log, that only logs failures. This log is active by default at ~/.pip/pip.log.'
-complete --no-files  -c pip -l log                        -r           -d 'Path to a verbose appending log. This log is inactive by default.'
-complete --no-files  -c pip -l proxy                      -r           -d 'Specify a proxy in the form [user: passwd@]proxy.server: port.'
+complete --no-files  -c pip -s q,                         -l quiet     -d 'Give less output. Option is additive, and can be used up to 3 times (corresponding to WARNING, ERROR, and CRITICAL logging levels)'
+complete --no-files  -c pip -l log                        -r           -d 'Path to a verbose appending log.'
+complete --no-files  -c pip -l proxy                      -r           -d 'Specify a proxy in the form [user: passwd@]proxy.server:port.'
+complete --no-files  -c pip -l retries                    -r           -d 'Maximum number of retries each connection should attempt (default 5 times).'
 complete --no-files  -c pip -l timeout                    -r           -d 'Set the socket timeout (default 15 seconds).'
-complete --no-files  -c pip -l exists-action              -r           -d 'Default action when a path already exists: (s)witch, (i)gnore, (w)ipe, (b)ackup.'
+complete --no-files  -c pip -l exists-action              -r           -d 'Default action when a path already exists: (s)witch, (i)gnore, (w)ipe, (b)ackup (a)bort.'
+complete --no-files  -c pip -l trusted-host               -r           -d 'Mark this host as trusted, even though it does not have valid or any HTTPS.'
 complete --no-files  -c pip -l cert                       -r           -d 'Path to alternate CA bundle.'
+complete --no-files  -c pip -l client-cert                -r           -d 'Path to SSL client certificate, a single file containing the private key and the certificate in PEM format.'
+complete --no-files  -c pip -l cache-dir                  -r           -d 'Store the cache data in <dir>.'
+complete --no-files  -c pip -l no-cache-dir               -r           -d 'Disable the cache.'
+complete --no-files  -c pip -l disable-pip-version-check  -r           -d 'Don\'t periodically check PyPI to determine whether a new version of pip is available for download. Implied with --no-index.'
+complete --no-files  -c pip -l no-color                   -r           -d 'Suppress colored output'
 
 complete --no-files -c pip	 -n '__fish_pip_using_command completion'	 -s b	 -l bash	 -d "Emit completion code for bash"
 complete --no-files -c pip	 -n '__fish_pip_using_command completion'	 -s z	 -l zsh	 -d "Emit completion code for zsh"
@@ -59,6 +67,8 @@ complete --no-files -c pip	 -n '__fish_pip_using_command freeze'	 -s r	 -l requi
 complete --no-files -c pip	 -n '__fish_pip_using_command freeze'	 -s f	 -l find-links	 -d "URL for finding packages, which will be added to the output."
 complete --no-files -c pip	 -n '__fish_pip_using_command freeze'	 -s l	 -l local	 -d "If in a virtualenv that has global access, do not output globally-installed packages."
 complete --no-files -c pip	 -n '__fish_pip_using_command freeze'	  -l user	 -d "Only output packages installed in user-site."
+complete --no-files -c pip	 -n '__fish_pip_using_command freeze'	  -l all	 -d "Only output packages installed in user-site."
+complete --no-files -c pip	 -n '__fish_pip_using_command freeze'	  -l exclude-editable	 -d "Only output packages installed in user-site."
 
 
 complete --no-files -c pip	 -n '__fish_pip_using_command install'	 -s c	 -l constraint	 -d "Constrain versions using the given constraints file. This option can be used multiple times."
