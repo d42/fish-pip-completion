@@ -115,7 +115,7 @@ class VeryORM:
             con.execute(q, (int(ts), self.index_id))
 
     def get_packages(self, query):
-        q = "SELECT name FROM packages WHERE index_id=? AND name LIKE ?"
+        q = "SELECT lower(name) as name FROM packages WHERE index_id=? AND name LIKE ?"
         result = self.conn.execute(q, [self.index_id, query + '%']).fetchall()
         return (pkg['name'] for pkg in result)
 
