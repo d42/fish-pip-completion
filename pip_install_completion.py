@@ -150,6 +150,10 @@ class SearchCache:
 
     def search(self, name):
         logger.info("searching for {}".format(name))
+        name, versep, ver = name.partition('==')
+        if versep:
+            versions = self.client.package_releases(name, True)
+            return ["{}=={}".format(name, v) for v in map(str, versions) if v.startswith(ver)]
         if self.database_stale:
             self.update()
         return self.db.get_packages(name)
