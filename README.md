@@ -1,4 +1,6 @@
 For usage see http://fishshell.com/docs/current/index.html#completion-path
 
-![](http://wstaw.org/m/2015/12/31/img1_1.png)
-![](http://wstaw.org/m/2015/12/31/img2.png)
+![](https://i.imgur.com/LDXI4az.png)
+![](https://i.imgur.com/WP6LVWm.png)
+![](https://i.imgur.com/Md4iaeH.png)
+
