@@ -149,7 +149,7 @@ class SearchCache:
         self.db = VeryORM(self.db_path, self.index)
 
     def search(self, name):
-        logger.info("searching for {}".format(name))
+        logger.info("searching for %s", name)
         name, versep, ver = name.partition('==')
         if versep:
             versions = self.client.package_releases(name, True)
